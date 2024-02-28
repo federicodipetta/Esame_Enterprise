@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "Libri_application.App": {
+    "Libri_application.App - Development": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

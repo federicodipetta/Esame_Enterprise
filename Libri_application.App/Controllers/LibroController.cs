@@ -34,24 +34,10 @@ namespace Libri_application.App.Controllers
         [Route("AddLibro")]
         public async Task<IActionResult> AddLibro(string isbn)
         {
-            await _libroService.AggiungiLibro(isbn);
-            return Ok();
+            bool a = await _libroService.AggiungiLibro(isbn);
+            return a ? Ok(): BadRequest();
         }
-        [HttpDelete]
-        [Route("DeleteLibro/{id}")]
-        public IActionResult DeleteLibro(string id)
-        {
-            _libroService.EliminaLibro(id);
-            return Ok();
-        }
-        [HttpPut]
-        [Route("ModificaLibro/{id}")]
-        public IActionResult ModificaLibro(Libro libro, string id)
-        {
-            _libroService.EliminaLibro(id);
-            _libroService.AggiungiLibro(libro.id);
-            return Ok();
-        }
+
 
     }
 }
