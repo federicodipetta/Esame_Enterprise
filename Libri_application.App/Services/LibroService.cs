@@ -1,10 +1,8 @@
 ﻿using global::Libri_application.App.Abstractions.Services;
-using global::Libri_application.Models.Context;
+
 using global::Libri_application.Models.Entities;
 using Libri_application.LibriService.models;
 using Libri_application.Models.Repository;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Immutable;
 
 namespace Libri_application.App.Services
 {
@@ -35,7 +33,7 @@ namespace Libri_application.App.Services
                     .Select(x => _repoC.Get(x.nome)).ToList();
                 libro.categorie=categorie
                     .Concat(
-                    libro.categorie.Where(x => !_repoC.Contains(x.nome))
+                    libro.categorie.Where(x => !_repoC.Contains(x.nome))//TODO:testare se il contains sulla lista funziona lo stesso
                     ).Distinct().ToList();
                     
                 
@@ -46,24 +44,6 @@ namespace Libri_application.App.Services
             }
         }
 
-        public bool EliminaLibro(Libro libro)
-        {
-           return EliminaLibro(libro.id);
-        }
-
-        public bool EliminaLibro(string id)
-        {
-            if(_repo.Get(id)==null)
-            {
-                _repo.Delete(_repo.Get(id));
-                _repo.Save();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         public List<Libro> GetLibri()
         {
@@ -71,8 +51,7 @@ namespace Libri_application.App.Services
         }
 
         public List<Libro> GetLibriByGenere(string genere)
-        {
-            
+        {       
             throw new NotImplementedException();
         }
 
