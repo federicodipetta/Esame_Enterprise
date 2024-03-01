@@ -3,6 +3,7 @@ using Libri_application.App.Factorys;
 using Libri_application.App.Models.Dtos;
 using Libri_application.App.Models.Requests;
 using Libri_application.App.Models.Responses;
+using Libri_application.App.Validators;
 using Libri_application.Models.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -45,6 +46,11 @@ namespace Libri_application.App.Controllers
 
             var identity = this.User.Identity as ClaimsIdentity;
             var idU = int.Parse(identity.Claims.Where(c => "Id" == c.Type).FirstOrDefault().Value);
+            var result = new RecensioneRequestValidator().Validate(recensione);
+            if (!result.IsValid)
+            {
+                return BadRequest(ResponseFactory.WithError(result.Errors));
+            }
             await _recensioneService.AggiungiRecensione(recensione.isbn,recensione.ToRecensione(idU));
             return Ok();
         }
