@@ -73,7 +73,7 @@ namespace Libri_application.App.Controllers
 
         [HttpPut]
         [Route("ModificaRecensione")]
-        public IActionResult ModificaRecensione(ModificaRecensioneRequest recensione)
+        public IActionResult ModificaRecensione(RecensioneRequest recensione)
         {
 
             var identity = this.User.Identity as ClaimsIdentity;

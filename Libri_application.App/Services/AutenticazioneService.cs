@@ -34,7 +34,7 @@ namespace Libri_application.App.Services
             {
                 throw new MyException("utente non trovato");
             }
-            if (CheckPassword(password,utente.salt,utente.password))
+            if (CheckPassword(password+_secret,utente.salt,utente.password))
             {
                 return GenerateToken(utente);
             }else throw new MyException("utente corretto ma password errata");

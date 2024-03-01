@@ -3,6 +3,7 @@ using Libri_application.App.Factorys;
 using Libri_application.App.Models.Dtos;
 using Libri_application.App.Models.Exception;
 using Libri_application.App.Models.Requests;
+using Libri_application.App.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +43,12 @@ namespace Libri_application.App.Controllers
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterRequest user)
         {
+            var validator = new RegisterValidator();
+            var result = validator.Validate(user);
+            if (!result.IsValid)
+            {
+                return BadRequest(Factorys.ResponseFactory.WithError(result.Errors));
+            }
             try
             {
                 var token = _service.Register(user.username, user.password, user.email);
