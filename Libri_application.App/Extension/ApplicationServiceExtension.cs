@@ -53,6 +53,9 @@ namespace Libri_application.App.Extension
             configuration.GetSection("JwtAuthentication")
             .Bind(jwt);
 
+            var pass = new PasswordOption();
+            configuration.GetSection("secret").Bind(pass); 
+
             
             services.AddAuthentication(options =>
             {
@@ -77,7 +80,7 @@ namespace Libri_application.App.Extension
                     };
                 });
             services.Configure<JwtOption>(configuration.GetSection("JwtAuthentication"));
-
+            services.Configure<PasswordOption>(configuration.GetSection("secret"));
             return services;
         }
     }

@@ -18,11 +18,13 @@ namespace Libri_application.App.Services
     {
         private readonly UtenteRepository _repoU ;
         private readonly JwtOption _jwt ;
+        private readonly string _secret;
 
-        public AutenticazioneService(UtenteRepository repository, IOptions<JwtOption> option)
+        public AutenticazioneService(UtenteRepository repository, IOptions<JwtOption> option,IOptions<PasswordOption>secretOption)
         {
             _repoU = repository;
             _jwt = option.Value;
+            _secret = secretOption.Value.Key;
 
         }
         public string Login(string username, string password)
@@ -42,7 +44,7 @@ namespace Libri_application.App.Services
         {
             var hash = new HMACSHA256();
             var salt = hash.Key;
-            var passwordHash = hash.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            var passwordHash = hash.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password+_secret));
             var utente = new Utente();
             utente.login = username;
             utente.password = Convert.ToBase64String(passwordHash); // Convert to Base64 string
