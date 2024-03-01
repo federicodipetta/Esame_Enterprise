@@ -21,23 +21,25 @@ namespace Libri_application.Models.Repository
         {
             return _ctx.Set<Libro>().Include(c=>c.categorie).Where(x => x.id == id).FirstOrDefault();
         }
+
         public bool Contains(string isbn)
         {
-            return _ctx.Set<Libro>().Any(c => c.isbn == isbn);
+                return _ctx.Set<Libro>().Any(c => c.isbn == isbn);
         }
-        public List<Libro> GetLibriByGenere(string genere)
+        public List<Libro> GetLibriByCategoria(string categoria)
         {
-            throw new NotImplementedException();
+            return _ctx.Set<Libro>().Where(x => x.categorie.Any(y => y.nome == categoria)).ToList();
         }
-        public List<Libro> GetLibriByAutore(string autori)
+
+        public List<Libro> GetLibriByAutore(string autore)
         {
-            return _ctx.Set<Libro>().Where(x => x.autori == autori).ToList();
+            return _ctx.Set<Libro>().Where(x => x.autori.Any(y => y.nome == autore)).ToList();
         }
+
         public List<Libro> GetLibriByTitolo(string titolo)
         {
             return _ctx.Set<Libro>().Where(x => x.titolo == titolo).ToList();
         }
-
 
         public Libro GetLibroByIsbn(string isbn)
         {

@@ -23,7 +23,12 @@ namespace Libri_application.LibriService.models.LibroDettagliato
         {
             Libro libro = new Libro();
             libro.id = id;
-            libro.autori = volumeInfo.authors[0];
+            libro.autori = volumeInfo.authors.ToList().Select(x =>
+            {
+                var c = new Autore();
+                c.nome = x;
+                return c;
+            }).ToList(); ;
             libro.titolo = volumeInfo.title;
             libro.editore = volumeInfo.publisher;
             libro.anno = volumeInfo.publishedDate;

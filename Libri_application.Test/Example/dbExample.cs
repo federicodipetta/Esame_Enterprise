@@ -16,7 +16,10 @@ namespace Libri_application.Test.Example
             var ctx = new MyDbContext();
             Libro libro = new Libro();
             libro.id = "9";
-            libro.autori = "autore";
+            var f = new Autore() { nome = "autore1" };
+            var g = new Autore() { nome = "autore2" };
+         
+            libro.autori = new List<Autore> {f, g};
             libro.titolo = "titolo";
             libro.editore = "editore";
             libro.anno = "2024";
@@ -26,9 +29,7 @@ namespace Libri_application.Test.Example
             CategoriaRepository categoriaRepository = new CategoriaRepository(ctx);
             //sono già presenti nel db
             var c = new Categoria() { nome = "banana"};
-            var a = categoriaRepository.Get("mela");
-            var b = categoriaRepository.Get("pera");
-            libro.categorie = new List<Categoria> { a, b,c};
+            libro.categorie = new List<Categoria> {c};
             LibroRepository libroRepository = new LibroRepository(ctx);
             libroRepository.Add(libro);
             libroRepository.Save();

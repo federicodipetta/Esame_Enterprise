@@ -20,6 +20,7 @@ namespace Libri_application.Models.Extension
             services.AddScoped<RecensioneRepository>();
             services.AddScoped<CategoriaRepository>();
             services.AddScoped<UtenteRepository>();
+            services.AddScoped<AutoreRepository>();
             return services;
         }
     }

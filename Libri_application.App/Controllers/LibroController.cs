@@ -1,5 +1,6 @@
 ﻿using Libri_application.App.Abstractions.Services;
 using Libri_application.App.Models.Dtos;
+using Libri_application.LibriService.models;
 using Libri_application.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,28 @@ namespace Libri_application.App.Controllers
         {
             return new LibroDto(_libroService.GetLibro(id));
         }
+
+        [HttpGet]
+        [Route("GetLibri/{titolo}")]
+        public List<LibroRidotto> GetLibriByTitoloOnline(string titolo)
+        {
+            return new List<LibroRidotto> (_libroService.GetLibriByTitolo(titolo));
+        }
+
+        [HttpGet]
+        [Route("GetLibri/{categoria}")]
+        public List<Libro> GetLibriByCategoria(string categoria)
+        {
+            return _libroService.GetLibriByCategoria(categoria);
+        }
+
+        [HttpGet]
+        [Route("GetLibri/{autore}")]
+        public List<Libro> GetLibriByAutore(string autore)
+        {
+            return _libroService.GetLibriByAutore(autore);
+        }
+
         [HttpPost]
         [Route("AddLibro")]
         public async Task<IActionResult> AddLibro(string isbn)
@@ -37,7 +60,5 @@ namespace Libri_application.App.Controllers
             bool a = await _libroService.AggiungiLibro(isbn);
             return a ? Ok(): BadRequest();
         }
-
-
     }
 }

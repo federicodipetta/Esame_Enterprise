@@ -10,10 +10,12 @@ namespace Libri_application.App.Services
     {
         private readonly LibroRepository _repo;
         private readonly CategoriaRepository _repoC;
-        public LibroService(LibroRepository repo, CategoriaRepository repoC)
+        private readonly AutoreRepository _repoA;
+        public LibroService(LibroRepository repo, CategoriaRepository repoC, AutoreRepository repoA)
         {
             _repo = repo;
             _repoC = repoC;
+            _repoA = repoA;
         }
         public async Task<bool> AggiungiLibro(string isbn)
         {
@@ -35,8 +37,13 @@ namespace Libri_application.App.Services
                     .Concat(
                     libro.categorie.Where(x => !_repoC.Contains(x.nome))//TODO:testare se il contains sulla lista funziona lo stesso
                     ).Distinct().ToList();
-                    
-                
+                var autori = libro.autori
+                .Where(x => _repoA.Contains(x.nome))
+                .Select(x => _repoA.Get(x.nome)).ToList();
+                libro.autori = autori
+                    .Concat(
+                    libro.autori.Where(x => !_repoA.Contains(x.nome))//TODO:testare se il contains sulla lista funziona lo stesso
+                    ).Distinct().ToList();
 
                 _repo.Add(libro);
                 _repo.Save();
@@ -50,9 +57,13 @@ namespace Libri_application.App.Services
             return _repo.GetAll().ToList();
         }
 
-        public List<Libro> GetLibriByGenere(string genere)
-        {       
-            throw new NotImplementedException();
+        public List<Libro> GetLibriByCategoria(string categoria)
+        {
+            return  _repo.GetLibriByCategoria(categoria);
+        }
+        public List<Libro> GetLibriByAutore(string autore)
+        {
+            return _repo.GetLibriByAutore(autore);
         }
 
         public List<LibroRidotto> GetLibriByTitolo(string titolo)
@@ -77,7 +88,7 @@ namespace Libri_application.App.Services
             {
                 LibroRidotto ridotto = new LibroRidotto();
                 ridotto.id = l.id;
-                ridotto.autore = l.autori;
+                ridotto.autori = l.autori;
                 ridotto.titolo = l.titolo;
                 ridotto.urlImmagine = l.img;
                 libriRidotti.Add(ridotto);

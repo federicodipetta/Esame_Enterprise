@@ -9,7 +9,8 @@ namespace Libri_application.App.Abstractions.Services
         Libro GetLibro(string id);
         Libro GetLibroByIsbn(string isbn);
         List<Libro> GetLibri();
-        List<Libro> GetLibriByGenere(string genere);
+        List<Libro> GetLibriByAutore(string autore);
+        List<Libro> GetLibriByCategoria(string categoria);
         List<LibroRidotto> GetLibriByTitolo(string titolo);
 
     }

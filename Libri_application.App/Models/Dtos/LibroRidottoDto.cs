@@ -19,7 +19,7 @@ namespace Libri_application.App.Models.Dtos
         {
             id = libro.id;
             titolo = libro.titolo;
-            autori = libro.autori.Split(',');
+            autori = libro.autori.Select(x=>x.nome).ToArray();
             urlImg = libro.img;
         }
 

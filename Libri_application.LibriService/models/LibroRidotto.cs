@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Libri_application.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Libri_application.LibriService.models
     public class LibroRidotto
     {
         public string id { get; set; }
-        public string autore { get; set; }
+        public ICollection<Autore> autori { get; set; }
         public string titolo { get; set; }
         public string urlImmagine { get; set; }
     }

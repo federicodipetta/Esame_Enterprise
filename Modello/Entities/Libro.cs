@@ -10,14 +10,13 @@ namespace Libri_application.Models.Entities
     {
         
         public string id { get; set; }
-        public string autori { get; set; }
         public string titolo { get; set; }
         public string editore { get; set; }
         public string anno { get; set; }
         public string descrizione { get; set; }
         public string isbn { get; set; }
         public string img { get; set; }
-
         public virtual ICollection<Categoria> categorie{ get; set; }
+        public virtual ICollection<Autore> autori { get; set; }
     }
 }

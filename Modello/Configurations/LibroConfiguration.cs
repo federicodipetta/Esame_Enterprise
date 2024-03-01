@@ -16,6 +16,7 @@ namespace Libri_application.Models.Configurations
             builder.ToTable("Libro");
             builder.HasKey(k => k.id);
             builder.HasMany(l => l.categorie).WithMany(c => c.libri).UsingEntity("CategoriaLibro");
+            builder.HasMany(l => l.autori).WithMany(c => c.libri).UsingEntity("AutoreLibro");
         }
     }
 }
