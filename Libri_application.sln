@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libri_application.Test", "L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libri_application.LibriService", "Libri_application.LibriService\Libri_application.LibriService.csproj", "{D1551236-69E8-43D4-B0E9-DC685A6D5684}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Libri_application.App", "Libri_application.App\Libri_application.App.csproj", "{7B0318BA-95ED-4E82-832F-35A878BE773C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libri_application.App", "Libri_application.App\Libri_application.App.csproj", "{7B0318BA-95ED-4E82-832F-35A878BE773C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementi di soluzione", "Elementi di soluzione", "{421AC70B-DF9A-4827-A325-B862C8F2831E}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
