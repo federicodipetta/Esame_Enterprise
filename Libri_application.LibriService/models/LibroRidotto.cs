@@ -13,5 +13,6 @@ namespace Libri_application.LibriService.models
         public ICollection<Autore> autori { get; set; }
         public string titolo { get; set; }
         public string urlImmagine { get; set; }
+        public string isbn { get; set; }
     }
 }

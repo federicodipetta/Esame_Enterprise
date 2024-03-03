@@ -11,6 +11,7 @@ namespace Libri_application.App.Models.Dtos
         public string[] autori { get; set; }
 
         public string urlImg { get; set; }
+        public string isbn { get; set; }
 
         public LibroRidottoDto()
         {
@@ -22,6 +23,7 @@ namespace Libri_application.App.Models.Dtos
             titolo = libro.titolo;
             autori = libro.autori.Select(x=>x.nome).ToArray();
             urlImg = libro.img;
+            isbn = libro.isbn;
         }
         public LibroRidottoDto(LibroRidotto libro)
         {
@@ -29,6 +31,8 @@ namespace Libri_application.App.Models.Dtos
             titolo = libro.titolo;
             autori = libro.autori.Select(x=>x.nome).ToArray();
             urlImg = libro.urlImmagine;
+            isbn = libro.isbn;
+            
         }
     }
 }

@@ -36,8 +36,9 @@ namespace Libri_application.App.Controllers
 
         [HttpGet]
         [Route("GetLibriTitolo/{titolo}")]
-        public async Task<List<LibroRidottoDto>> GetLibriByTitoloOnline(string titolo)
+        public async Task<List<LibroRidottoDto>> GetLibriByTitoloOnline([FromRoute]string titolo)
         {
+            titolo = HttpUtility.UrlDecode(titolo);
             var libri = await _libroService.GetLibriByTitolo(titolo);
             return libri.Select(x => new LibroRidottoDto(x)).ToList();
         }

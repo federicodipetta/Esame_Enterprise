@@ -63,7 +63,8 @@ namespace Libri_application.LibriService
             l.anno = libro.volumeInfo.publishedDate == null ? "" : libro.volumeInfo.publishedDate.Substring(0, 4);
             l.descrizione = libro.volumeInfo.description == null ? "" : libro.volumeInfo.description;
             l.img = libro.volumeInfo.imageLinks == null ? "" : libro.volumeInfo.imageLinks.smallThumbnail;
-            l.isbn = libro.volumeInfo.industryIdentifiers == null ? "" : libro.volumeInfo.industryIdentifiers[1].identifier;
+            l.isbn = libro.volumeInfo.industryIdentifiers == null ? "" 
+                : libro.volumeInfo.industryIdentifiers.FirstOrDefault(x=>x.type=="ISBN_13")?.identifier??"";
             l.categorie = libro.volumeInfo.categories == null ? new List<Categoria>() : libro.volumeInfo.categories.
                 ToList().Select(x =>
                 {
@@ -96,8 +97,13 @@ namespace Libri_application.LibriService
                     c.nome = x;
                     return c;
                 }).ToList();
-                l.titolo = libro.volumeInfo.title;
-                l.urlImmagine = libro.volumeInfo.imageLinks.smallThumbnail;
+                l.titolo = libro.volumeInfo.title ?? "";
+                l.urlImmagine = libro.volumeInfo.imageLinks == null ? "" :
+                    libro.volumeInfo.imageLinks.smallThumbnail;
+                l.isbn = libro.volumeInfo.industryIdentifiers == null ? 
+                    "" :
+                    libro.volumeInfo.industryIdentifiers.FirstOrDefault(x => x.type == "ISBN_13")?.identifier 
+                    ?? "";
                 libriRidotti.Add(l);
             }
             return libriRidotti;

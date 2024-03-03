@@ -66,8 +66,15 @@ namespace Libri_application.App.Controllers
             }
             var identity = this.User.Identity as ClaimsIdentity;
             var idU = int.Parse(identity.Claims.Where(c => "Id" == c.Type).FirstOrDefault().Value);
-            _recensioneService.EliminaRecensione(recensione.ToRecensione(idU));
-            return Ok();
+            try
+            {
+                _recensioneService.EliminaRecensione(recensione.ToRecensione(idU));
+            }
+            catch
+            {
+                return BadRequest(ResponseFactory.WithError("recensione non trovata"));
+            }
+            return Ok(ResponseFactory.WithSuccess("recensione eliminata con successo"));
         }
 
         [HttpGet]
@@ -88,9 +95,17 @@ namespace Libri_application.App.Controllers
 
             var identity = this.User.Identity as ClaimsIdentity;
             var idU = int.Parse(identity.Claims.Where(c => "Id" == c.Type).FirstOrDefault().Value);
-            _recensioneService.ModificaRecensione(recensione.ToRecensione(idU));
-            return Ok(ResponseFactory.WithSuccess("modifica avvenuta con successo"));
-        }
+            var result = new RecensioneRequestValidator().Validate(recensione);
+            if (!result.IsValid)
+            {
+                return BadRequest(ResponseFactory.WithError(result.Errors));
+            }
+            bool a = _recensioneService.ModificaRecensione(recensione.ToRecensioneConIsbn(idU,recensione.isbn));
+            return a
+                ?
+                Ok(ResponseFactory.WithSuccess("modifica avvenuta con successo"))
+                : BadRequest(ResponseFactory.WithError("modifica non avvenuta"));
+            }
 
     }
 }

@@ -90,6 +90,7 @@ namespace Libri_application.App.Services
                 ridotto.autori = l.autori;
                 ridotto.titolo = l.titolo;
                 ridotto.urlImmagine = l.img;
+                ridotto.isbn = l.isbn;
                 libriRidotti.Add(ridotto);
             }
             return libriRidotti;

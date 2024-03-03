@@ -25,5 +25,14 @@ namespace Libri_application.App.Models.Requests
             recensione.periodo = periodo;
             return recensione;
         }
+
+        public Recensione ToRecensioneConIsbn(int IdUtente, string isbn)
+        {
+            var recensione = ToRecensione(IdUtente);
+            var libro = new Libro();
+            libro.isbn = isbn;
+            recensione.libro = libro;
+            return recensione;
+        }
     }
 }

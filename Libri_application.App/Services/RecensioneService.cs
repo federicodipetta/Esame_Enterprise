@@ -54,7 +54,9 @@ namespace Libri_application.App.Services
 
         public bool ModificaRecensione(Recensione recensione)
         {
-            var x = _repoR.GetRecensioneByUtenteByLibro(recensione.idUtente, recensione.idLibro);
+            recensione.libro = _repoL.GetLibroByIsbn(recensione.libro.isbn);
+            if(recensione.libro == null) return false;
+            var x = _repoR.GetRecensioneByUtenteByLibro(recensione.idUtente, recensione.libro.id);
             if (x == null) return false;
             x.recensione = recensione.recensione;
             x.voto = recensione.voto;
