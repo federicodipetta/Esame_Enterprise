@@ -1,4 +1,5 @@
 ﻿using Libri_application.App.Abstractions.Services;
+using Libri_application.App.Factorys;
 using Libri_application.App.Models.Dtos;
 using Libri_application.LibriService.models;
 using Libri_application.Models.Entities;
@@ -57,8 +58,18 @@ namespace Libri_application.App.Controllers
         [Route("AddLibro")]
         public async Task<IActionResult> AddLibro(string isbn)
         {
-            bool a = await _libroService.AggiungiLibro(isbn);
-            return a ? Ok(): BadRequest();
+            try
+            {
+                bool a = await _libroService.AggiungiLibro(isbn);
+                return a ? Ok(ResponseFactory.WithSuccess("libro aggiunto"))
+                :
+                BadRequest(ResponseFactory.WithError("libro presente o isbn errato"));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(ResponseFactory.WithError(e));
+            }
+            
         }
     }
 }
