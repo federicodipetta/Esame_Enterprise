@@ -19,7 +19,7 @@ namespace Libri_application.Models.Repository
 
         public List<Recensione> GetRecensioneByUtente(int idUtente)
         {
-            return _ctx.Recensione.Include(x=>x.libro).Where(x => x.idUtente == idUtente).ToList();
+            return _ctx.Recensione.Include(x=>x.libro).Include(x=>x.libro.autori).Where(x => x.idUtente == idUtente).ToList();
         }
 
         public Recensione GetRecensioneByUtenteByLibro(int idUtente, string idLibro)
@@ -28,6 +28,7 @@ namespace Libri_application.Models.Repository
                 .Include(x => x.libro)
                 .Include(x=> x.utente)
                 .Include(x=>x.libro.categorie)
+                .Include(x => x.libro.autori)
                 .Where(x => x.idUtente == idUtente && x.idLibro == idLibro)
                 .FirstOrDefault();
         }

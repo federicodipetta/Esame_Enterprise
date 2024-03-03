@@ -30,6 +30,10 @@ namespace Libri_application.App.Services
                 // Il libro non è presente nel database
                 var libriService = new LibriService.LibriService();
                 Libro libro = await libriService.GetLibro(isbn);
+                if (_repo.ContainsId(libro.id))
+                {
+                    return false;
+                }
                 var categorieEsistenti = libro.categorie
                     .Where(x => _repoC.Contains(x.nome))
                     .Select(x => _repoC.Get(x.nome)).ToList();
@@ -46,7 +50,6 @@ namespace Libri_application.App.Services
                     .Concat(
                     libro.autori.Where(x => !autori.Select(y => y.nome.Trim()).Any(z => z == x.nome))
                     ).ToList();
-
                 _repo.Add(libro);
                 _repo.Save();
                 return true;

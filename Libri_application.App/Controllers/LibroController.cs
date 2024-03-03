@@ -5,6 +5,7 @@ using Libri_application.LibriService.models;
 using Libri_application.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Web;
 
 namespace Libri_application.App.Controllers
 {
@@ -45,6 +46,8 @@ namespace Libri_application.App.Controllers
         [Route("GetLibriCategoria/{categoria}")]
         public List<LibroDto> GetLibriByCategoria(string categoria)
         {
+
+            categoria = HttpUtility.UrlDecode(categoria);
             return _libroService.GetLibriByCategoria(categoria).Select(x=> new LibroDto(x)).ToList();
         }
 

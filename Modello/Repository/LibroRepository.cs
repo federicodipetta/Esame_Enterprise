@@ -19,31 +19,35 @@ namespace Libri_application.Models.Repository
 
         public override Libro Get(object id)
         {
-            return _ctx.Set<Libro>().Include(c=>c.categorie).Where(x => x.id == id).FirstOrDefault();
+            return _ctx.Set<Libro>().Include(c=>c.categorie).Include(x =>x.autori).Where(x => x.id == id).FirstOrDefault();
         }
 
         public bool Contains(string isbn)
         {
-                return _ctx.Set<Libro>().Any(c => c.isbn == isbn);
+                return _ctx.Set<Libro>().Where(c => c.isbn.Replace(" ", "") == isbn.Replace(" ", "").Replace("-", "")).ToList().Count>0;
+        }
+        public bool ContainsId(string id)
+        {
+            return _ctx.Set<Libro>().Where(c => c.id.Replace(" ", "") == id.Replace(" ", "")).ToList().Count > 0;
         }
         public List<Libro> GetLibriByCategoria(string categoria)
         {
-            return _ctx.Set<Libro>().Where(x => x.categorie.Any(y => y.nome == categoria)).ToList();
+            return _ctx.Set<Libro>().Include(x=> x.autori).Include(x=>x.categorie).Where(x => x.categorie.Any(y => y.nome.ToLower().Trim().Contains(categoria.ToLower().Trim()))).ToList();
         }
 
         public List<Libro> GetLibriByAutore(string autore)
         {
-            return _ctx.Set<Libro>().Where(x => x.autori.Any(y => y.nome == autore)).ToList();
+            return _ctx.Set<Libro>().Include(x => x.autori).Include(x => x.categorie).Where(x => x.autori.Any(y => y.nome.Replace(" ", "").ToLower().Contains(autore.Replace(" ", "").ToLower()))).ToList();
         }
 
         public List<Libro> GetLibriByTitolo(string titolo)
         {
-            return _ctx.Set<Libro>().Where(x => x.titolo == titolo).ToList();
+            return _ctx.Set<Libro>().Include(x=>x.autori).Where(x => x.titolo.ToLower().Replace(" ", "").Contains(titolo.ToLower().Replace(" ", ""))).ToList();
         }
 
         public Libro GetLibroByIsbn(string isbn)
         {
-            return _ctx.Libro.Include(x=>x.categorie).Where(x => x.isbn == isbn).FirstOrDefault();
+            return _ctx.Libro.Include(x=>x.categorie).Where(x => x.isbn == isbn.Replace(" ", "").Replace("-", "")).FirstOrDefault();
         }
     }
     
