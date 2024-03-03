@@ -59,7 +59,11 @@ namespace Libri_application.App.Controllers
         [Route("DeleteRecensione")]
         public IActionResult DeleteRecensione(RecensioneDelete recensione)
         {
-
+            var result = new RecensioneDeleteValidator().Validate(recensione);
+            if (!result.IsValid)
+            {
+                return BadRequest(ResponseFactory.WithError(result.Errors));
+            }
             var identity = this.User.Identity as ClaimsIdentity;
             var idU = int.Parse(identity.Claims.Where(c => "Id" == c.Type).FirstOrDefault().Value);
             _recensioneService.EliminaRecensione(recensione.ToRecensione(idU));
