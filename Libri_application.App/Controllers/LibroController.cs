@@ -20,37 +20,38 @@ namespace Libri_application.App.Controllers
 
         [HttpGet]
         [Route("GetLibroIsbn/{isbn}")]
-        public LibroRidottoDto GetLibri(string isbn)
+        public async Task<LibroRidottoDto> GetLibri(string isbn)
         {
-            return new LibroRidottoDto(_libroService.GetLibroByIsbn(isbn));
+            return new LibroRidottoDto(await _libroService.GetLibroByIsbn(isbn));
         }
 
         [HttpGet]
         [Route("GetLibro/{id}")]
-        public LibroDto GetLibro(string id)
+        public async Task<LibroDto> GetLibro(string id)
         {
-            return new LibroDto(_libroService.GetLibro(id));
+            return new LibroDto(await _libroService.GetLibro(id));
         }
 
         [HttpGet]
-        [Route("GetLibri/{titolo}")]
-        public List<LibroRidotto> GetLibriByTitoloOnline(string titolo)
+        [Route("GetLibriTitolo/{titolo}")]
+        public async Task<List<LibroRidottoDto>> GetLibriByTitoloOnline(string titolo)
         {
-            return new List<LibroRidotto> (_libroService.GetLibriByTitolo(titolo));
+            var libri = await _libroService.GetLibriByTitolo(titolo);
+            return libri.Select(x => new LibroRidottoDto(x)).ToList();
         }
 
         [HttpGet]
-        [Route("GetLibri/{categoria}")]
-        public List<Libro> GetLibriByCategoria(string categoria)
+        [Route("GetLibriCategoria/{categoria}")]
+        public List<LibroDto> GetLibriByCategoria(string categoria)
         {
-            return _libroService.GetLibriByCategoria(categoria);
+            return _libroService.GetLibriByCategoria(categoria).Select(x=> new LibroDto(x)).ToList();
         }
 
         [HttpGet]
-        [Route("GetLibri/{autore}")]
-        public List<Libro> GetLibriByAutore(string autore)
+        [Route("GetLibriAutore/{autore}")]
+        public List<LibroDto> GetLibriByAutore(string autore)
         {
-            return _libroService.GetLibriByAutore(autore);
+            return _libroService.GetLibriByAutore(autore).Select(x => new LibroDto(x)).ToList();
         }
 
         [HttpPost]

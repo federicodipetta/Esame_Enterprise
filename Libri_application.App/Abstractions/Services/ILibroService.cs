@@ -6,12 +6,11 @@ namespace Libri_application.App.Abstractions.Services
     public interface ILibroService
     {
         Task<bool> AggiungiLibro(string isbn);
-        Libro GetLibro(string id);
-        Libro GetLibroByIsbn(string isbn);
-        List<Libro> GetLibri();
+        Task<Libro> GetLibro(string id);
+        Task<Libro> GetLibroByIsbn(string isbn);
         List<Libro> GetLibriByAutore(string autore);
         List<Libro> GetLibriByCategoria(string categoria);
-        List<LibroRidotto> GetLibriByTitolo(string titolo);
+        Task<List<LibroRidotto>> GetLibriByTitolo(string titolo);
 
     }
 }

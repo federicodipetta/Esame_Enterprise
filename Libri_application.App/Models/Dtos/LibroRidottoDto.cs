@@ -1,4 +1,5 @@
-﻿using Libri_application.Models.Entities;
+﻿using Libri_application.LibriService.models;
+using Libri_application.Models.Entities;
 
 namespace Libri_application.App.Models.Dtos
 {
@@ -22,6 +23,12 @@ namespace Libri_application.App.Models.Dtos
             autori = libro.autori.Select(x=>x.nome).ToArray();
             urlImg = libro.img;
         }
-
+        public LibroRidottoDto(LibroRidotto libro)
+        {
+            id = libro.id;
+            titolo = libro.titolo;
+            autori = libro.autori.Select(x=>x.nome).ToArray();
+            urlImg = libro.urlImmagine;
+        }
     }
 }

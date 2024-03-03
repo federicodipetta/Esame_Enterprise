@@ -52,13 +52,6 @@ namespace Libri_application.App.Services
                 return true;
             }
         }
-        
-
-
-        public List<Libro> GetLibri()
-        {
-            return _repo.GetAll().ToList();
-        }
 
         public List<Libro> GetLibriByCategoria(string categoria)
         {
@@ -69,19 +62,19 @@ namespace Libri_application.App.Services
             return _repo.GetLibriByAutore(autore);
         }
 
-        public List<LibroRidotto> GetLibriByTitolo(string titolo)
+        public async Task<List<LibroRidotto>> GetLibriByTitolo(string titolo)
         {
             List<Libro> libri = _repo.GetLibriByTitolo(titolo);
             if(libri.Count == 0)
             {
                 // Il libro non è presente nel database
                 var service = new LibriService.LibriService();
-                return service.GetLibri(titolo).Result;
+                return await service.GetLibri(titolo);
             }
             else
             {
                 // Il libro è presente nel database
-                return  LibroToRidotto(_repo.GetLibriByTitolo(titolo));
+                return  LibroToRidotto(libri);
             }
         }
         private List<LibroRidotto> LibroToRidotto(List<Libro> libro)
@@ -99,26 +92,27 @@ namespace Libri_application.App.Services
             return libriRidotti;
         }
 
-        public Libro GetLibro(string id)
+        public async Task<Libro> GetLibro(string id)
         {
-            if (_repo.Get(id) == null)
+            Libro libro = _repo.Get(id);
+            if (libro == null)
             {
                 var service = new LibriService.LibriService();
-                var libro = service.GetLibro(id).Result;
-                return libro;
+                var libro2 = await service.GetLibroById(id);
+                return libro2;
             }
             else
             {
-                return _repo.Get(id);
+                return libro;
             }
         }
 
-        public Libro GetLibroByIsbn(string isbn)
+        public async Task<Libro> GetLibroByIsbn(string isbn)
         {
             if (_repo.GetLibroByIsbn(isbn) == null)
             {
                 var service = new LibriService.LibriService();
-                var libro = service.GetLibro(isbn).Result;
+                var libro = await service.GetLibro(isbn);
                 return libro;
             }
             else

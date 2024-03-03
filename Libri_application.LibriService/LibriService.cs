@@ -30,32 +30,12 @@ namespace Libri_application.LibriService
             HttpContent content = response.Content;       
             string data = await content.ReadAsStringAsync();
             var libro = JsonSerializer.Deserialize<models.LibroService>(data);
-
+            if(libro==null || libro.items==null || libro.items[0]==null || libro.items[0].id==null) throw new Exception("Libro non presente");
             HttpResponseMessage httpResponseMessage = await client.GetAsync(urlId + libro.items[0].id);
             HttpContent httpContent = httpResponseMessage.Content;
             string data2 = await httpContent.ReadAsStringAsync();
             var libro2 = JsonSerializer.Deserialize<LibroDettagliato>(data2);
-            var l = new Libro();
-            l.id = libro2.id;
-            l.autori = libro2.volumeInfo.authors.ToList().Select(x =>
-            {
-                var c = new Autore();
-                c.nome = x;
-                return c;
-            }).ToList();
-            l.titolo = libro2.volumeInfo.title;
-            l.editore = libro2.volumeInfo.publisher;
-            l.anno = libro2.volumeInfo.publishedDate.Substring(0,4);
-            l.descrizione = libro2.volumeInfo.description;
-            l.img = libro2.volumeInfo.imageLinks.smallThumbnail;
-            l.isbn = isbn;
-            l.categorie = libro2.volumeInfo.categories.ToList().Select(x =>
-            {
-                var c = new Categoria();
-                c.nome = x;
-                return c;
-            }).ToList();
-            return l;                                                             
+            return CreaLibro(libro2);
         }
 
         public async Task<Libro> GetLibroById(string id)
@@ -65,6 +45,11 @@ namespace Libri_application.LibriService
             HttpContent httpContent = httpResponseMessage.Content;
             string data = await httpContent.ReadAsStringAsync();
             var libro = JsonSerializer.Deserialize<LibroDettagliato>(data);
+            return CreaLibro(libro);
+        }
+        private Libro CreaLibro(LibroDettagliato libro)
+        {
+            if(libro==null || libro.volumeInfo==null) throw new Exception("Libro non presente");
             var l = new Libro();
             l.id = libro.id;
             l.autori = libro.volumeInfo.authors.ToList().Select(x =>
@@ -75,26 +60,32 @@ namespace Libri_application.LibriService
             }).ToList();
             l.titolo = libro.volumeInfo.title;
             l.editore = libro.volumeInfo.publisher;
-            l.anno = libro.volumeInfo.publishedDate.Substring(0, 4);
-            l.descrizione = libro.volumeInfo.description;
-            l.img = libro.volumeInfo.imageLinks.smallThumbnail;
-            l.categorie = libro.volumeInfo.categories.ToList().Select(x =>
-            {
-                var c = new Categoria();
-                c.nome = x;
-                return c;
-            }).ToList();
+            l.anno = libro.volumeInfo.publishedDate == null ? "" : libro.volumeInfo.publishedDate.Substring(0, 4);
+            l.descrizione = libro.volumeInfo.description == null ? "" : libro.volumeInfo.description;
+            l.img = libro.volumeInfo.imageLinks == null ? "" : libro.volumeInfo.imageLinks.smallThumbnail;
+            l.isbn = libro.volumeInfo.industryIdentifiers == null ? "" : libro.volumeInfo.industryIdentifiers[1].identifier;
+            l.categorie = libro.volumeInfo.categories == null ? new List<Categoria>() : libro.volumeInfo.categories.
+                ToList().Select(x =>
+                {
+                    var c = new Categoria();
+                    c.nome = x;
+                    return c;
+                }).ToList();
             return l;
         }
 
         public async Task<List<LibroRidotto>> GetLibri(string titolo)
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(urlTitolo+titolo+maxResult+"10");
+            HttpResponseMessage response = await client.GetAsync(urlTitolo+titolo+maxResult+"5");
             HttpContent content = response.Content;
             string data = await content.ReadAsStringAsync();
             var libri = JsonSerializer.Deserialize<models.LibroService>(data);
             List<LibroRidotto> libriRidotti = new List<LibroRidotto>();
+            if (libri.items == null)
+            {
+                return libriRidotti;
+            }
             foreach (var libro in libri.items)
             {
                 var l = new LibroRidotto();
